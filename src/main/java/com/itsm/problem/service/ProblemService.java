@@ -40,4 +40,24 @@ public class ProblemService {
         record.setStatus("KNOWN_ERROR");
         return problemRepository.save(record);
     }
+
+    @Transactional
+    public ProblemRecord updateProblem(String id, String tenantId, ProblemRecord update) {
+        ProblemRecord record = getProblem(id, tenantId)
+                .orElseThrow(() -> new RuntimeException("Problem not found"));
+        if (update.getTitle() != null) record.setTitle(update.getTitle());
+        if (update.getDescription() != null) record.setDescription(update.getDescription());
+        if (update.getStatus() != null) record.setStatus(update.getStatus());
+        if (update.getSeverity() != null) record.setSeverity(update.getSeverity());
+        if (update.getAssignedTo() != null) record.setAssignedTo(update.getAssignedTo());
+        return problemRepository.save(record);
+    }
+
+    @Transactional
+    public void deleteProblem(String id, String tenantId) {
+        ProblemRecord record = getProblem(id, tenantId)
+                .orElseThrow(() -> new RuntimeException("Problem not found"));
+        problemRepository.delete(record);
+        log.info("Deleted problem {} for tenant {}", id, tenantId);
+    }
 }

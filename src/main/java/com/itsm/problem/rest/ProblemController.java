@@ -44,4 +44,20 @@ public class ProblemController {
             @RequestBody Map<String, String> payload) {
         return ResponseEntity.ok(problemService.updateRootCause(id, tenantId, payload.get("rootCause"), payload.get("workaround")));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProblemRecord> updateProblem(
+            @PathVariable String tenantId,
+            @PathVariable String id,
+            @RequestBody ProblemRecord update) {
+        return ResponseEntity.ok(problemService.updateProblem(id, tenantId, update));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProblem(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        problemService.deleteProblem(id, tenantId);
+        return ResponseEntity.noContent().build();
+    }
 }

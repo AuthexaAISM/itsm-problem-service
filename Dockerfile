@@ -1,9 +1,9 @@
 # ─── Build Stage ────────────────────────────────────────────────────────────
-FROM eclipse-temurin:17-jdk-jammy AS build
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN apt-get update && apt-get install -y maven && mvn clean package -DskipTests -q
+RUN for i in 1 2 3 4 5; do mvn clean package -DskipTests -q && exit 0 || sleep 5; done; exit 1
 
 # ─── Runtime Stage ───────────────────────────────────────────────────────────
 FROM eclipse-temurin:17-jre-jammy
